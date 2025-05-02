@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ artist.name }}{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="card mb-3">
+        {% if artist.imageUrl %}
+            <img src="{{ artist.imageUrl }}" class="card-img-top" alt="{{ artist.name }}">
+        {% endif %}
+        <div class="card-body">
+            <h2 class="card-title">{{ artist.name }}</h2>
+            {% if artist.genres is not empty %}
+                <p>
+                    <strong>Genres:</strong>
+                    {{ artist.genres|join(', ') }}
+                </p>
+            {% endif %}
+        </div>
+    </div>
+
+    <a href="{{ path('app_article_new') }}" class="btn btn-primary">Create Article for {{ artist.name }}</a>
+</div>
+{% endblock %}

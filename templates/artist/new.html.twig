@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add Artist{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>Add a new Artist</h1>
+    {{ form_start(artistForm) }}
+        {{ form_row(artistForm.spotifyId) }}
+        {{ form_row(artistForm.save) }}
+    {{ form_end(artistForm) }}
+</div>
+{% endblock %}
