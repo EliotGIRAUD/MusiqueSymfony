@@ -28,30 +28,34 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
 
     public function authenticate(Request $request): Passport
     {
-        $email = $request->getPayload()->getString('email');
-
+        $email = $request->request->get('email');
+        $password = $request->request->get('password');
+    
+        // Stocke l'email dans la session pour l'auto-complétion de l'email
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
-
+    
         return new Passport(
             new UserBadge($email),
-            new PasswordCredentials($request->getPayload()->getString('password')),
+            new PasswordCredentials($password),
             [
-                new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')),
+                new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
                 new RememberMeBadge(),
             ]
         );
     }
+    
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+        // Si une page précédente est disponible, redirige vers celle-ci
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
-
-        // For example:
-        // return new RedirectResponse($this->urlGenerator->generate('some_route'));
-        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+    
+        // Sinon, redirige vers la page d'accueil ou un autre chemin par défaut
+        return new RedirectResponse($this->urlGenerator->generate('app_home'));
     }
+    
 
     protected function getLoginUrl(Request $request): string
     {

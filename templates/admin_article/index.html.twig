@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Liste des articles{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Liste des articles</h1>
+    <a href="{{ path('admin_article_new') }}" class="btn btn-success mb-3">Créer un nouvel article</a>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Titre</th>
+                <th>Publié le</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article in articles %}
+                <tr>
+                    <td>{{ article.id }}</td>
+                    <td>{{ article.title }}</td>
+                    <td>{{ article.publishedAt ? article.publishedAt|date('d/m/Y H:i') : 'Non publié' }}</td>
+                    <td>
+                        <a href="{{ path('admin_article_edit', { id: article.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                        <a href="{{ path('admin_article_delete', { id: article.id }) }}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Voulez-vous vraiment supprimer cet article ?')">Supprimer</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" class="text-center">Aucun article trouvé.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

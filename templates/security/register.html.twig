@@ -1,0 +1,9 @@
+{# templates/security/register.html.twig #}
+
+<h1>Register</h1>
+
+{{ form_start(registrationForm) }}
+    {{ form_row(registrationForm.email) }}
+    {{ form_row(registrationForm.plainPassword) }}
+    {{ form_row(registrationForm.submit) }}
+{{ form_end(registrationForm) }}
