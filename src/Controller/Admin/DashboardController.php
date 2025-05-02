@@ -30,9 +30,5 @@ class DashboardController extends AbstractDashboardController
 
         // Lien vers le CRUD Article
         yield MenuItem::linkToCrud('Articles', 'fas fa-music', Article::class);
-
-        // Si tu veux gérer les commentaires ou les utilisateurs en backoffice :
-        // yield MenuItem::linkToCrud('Comments', 'fas fa-comments', Comment::class);
-        // yield MenuItem::linkToCrud('Users', 'fas fa-user', User::class);
     }
 }

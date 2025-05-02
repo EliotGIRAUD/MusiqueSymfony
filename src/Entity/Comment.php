@@ -57,9 +57,6 @@ class Comment
         return $this->createdAt;
     }
 
-    // Pas forcément besoin de setCreatedAt, 
-    // on ne change pas la date une fois créée.
-
     public function getArticle(): ?Article
     {
         return $this->article;

@@ -9,10 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/api/article')] // Pour les routes API
+#[Route('/api/article')]
 class ArticleController extends AbstractController
 {
-    // Index - Pour récupérer tous les articles
     #[Route('/', name: 'api_article_index', methods: ['GET'])]
     public function index(ArticleRepository $articleRepository): JsonResponse
     {
@@ -32,30 +31,24 @@ class ArticleController extends AbstractController
         return new JsonResponse($data);
     }
 
-    // Création d'un nouvel article
     #[Route('/new', name: 'api_article_new', methods: ['POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        // Récupérer les données JSON envoyées avec la requête
         $data = json_decode($request->getContent(), true);
 
-        // Valider les données (ici tu peux ajouter des vérifications supplémentaires)
         if (!isset($data['title'], $data['content'], $data['slug'], $data['publishedAt'])) {
             return new JsonResponse(['error' => 'Missing required fields'], 400);
         }
 
-        // Créer un nouvel article à partir des données JSON
         $article = new Article();
         $article->setTitle($data['title']);
         $article->setContent($data['content']);
         $article->setSlug($data['slug']);
         $article->setPublishedAt(new \DateTimeImmutable($data['publishedAt']));
 
-        // Sauvegarder dans la base de données
         $entityManager->persist($article);
         $entityManager->flush();
 
-        // Retourner une réponse JSON avec les détails du nouvel article
         return new JsonResponse([
             'status' => 'success',
             'message' => 'Article created successfully',
@@ -69,7 +62,6 @@ class ArticleController extends AbstractController
         ], 201);
     }
 
-    // Montrer un article spécifique
     #[Route('/{id}', name: 'api_article_show', methods: ['GET'])]
     public function show(Article $article): JsonResponse
     {
@@ -82,13 +74,11 @@ class ArticleController extends AbstractController
         ]);
     }
 
-    // Editer un article
     #[Route('/{id}/edit', name: 'api_article_edit', methods: ['PUT'])]
     public function edit(Request $request, Article $article, EntityManagerInterface $entityManager): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
-        // Valider les données
         if (isset($data['title'])) {
             $article->setTitle($data['title']);
         }
@@ -105,7 +95,6 @@ class ArticleController extends AbstractController
             $article->setPublishedAt(new \DateTimeImmutable($data['publishedAt']));
         }
 
-        // Sauvegarder les modifications
         $entityManager->flush();
 
         return new JsonResponse([
@@ -121,7 +110,6 @@ class ArticleController extends AbstractController
         ]);
     }
 
-    // Supprimer un article
     #[Route('/{id}', name: 'api_article_delete', methods: ['DELETE'])]
     public function delete(Article $article, EntityManagerInterface $entityManager): JsonResponse
     {

@@ -31,9 +31,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     #[Assert\NotBlank]
-    private ?string $password = null; // this will hold the hashed password
+    private ?string $password = null;
 
-    // Add the plainPassword property (not persisted to the database)
     private ?string $plainPassword = null;
 
     public function getId(): ?int
