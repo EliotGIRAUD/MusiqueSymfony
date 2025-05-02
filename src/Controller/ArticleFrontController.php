@@ -46,9 +46,21 @@ class ArticleFrontController extends AbstractController
     {
         $articles = $articleRepository->findAll();
 
-        // Affichage de la liste des articles dans une vue Twig
         return $this->render('article/index.html.twig', [
             'articles' => $articles,
         ]);
     }
+
+    #[Route('/article/{id}/export-pdf', name: 'article_export_pdf')]
+    public function exportPdf(Article $article, MessageBusInterface $bus): Response
+    {
+        $htmlContent = $this->renderView('article/pdf_template.html.twig', [
+            'article' => $article,
+        ]);
+    
+        $bus->dispatch(new GeneratePdfMessage($htmlContent));
+    
+        return new Response('Le PDF est en cours de génération. Vous serez notifié lorsque c\'est terminé.');
+    }
+    
 }
